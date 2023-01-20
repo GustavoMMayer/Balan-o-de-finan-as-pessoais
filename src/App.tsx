@@ -22,6 +22,47 @@ const App = ()=>{
     setCurrenteMunth(newMonth);
   }
 
+  const setDate = (dateString:string)=>{
+    let [year, month, dayC] = dateString.split('-')
+    let day = dayC.substring(0,2)
+    
+    
+    return `${year}, ${month}, ${day}`
+  } 
+
+  useEffect(()=>{
+    const getAddLocalStorage =()=>{
+      const listJs = localStorage.getItem('lista')
+      let newlist2:Item[] = [];
+      if(listJs){
+        const newList = JSON.parse(listJs)
+                  
+          for(let n in newList){
+            
+            newlist2.push({date:new Date (setDate(newList[n].date)), category:newList[n].category, title:newList[n].title, value:newList[n].value })
+            
+          }
+          
+        
+      }   
+      setList(newlist2)
+
+    }
+    getAddLocalStorage();
+
+  },[])
+  
+
+  useEffect(()=>{
+    const addLocalStorage =()=>{
+      
+      const listJson =JSON.stringify(list);
+      
+      localStorage.setItem('lista',listJson)
+    }
+    addLocalStorage();
+  },[list])
+
   const handleAddItem =(item:Item)=>{
     let newList = [...list]
     newList.push(item);
